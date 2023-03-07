@@ -1,7 +1,6 @@
 package com.kma.project.chatapp.controller;
 
 import com.kma.project.chatapp.dto.request.*;
-import com.kma.project.chatapp.dto.response.MessageResponse;
 import com.kma.project.chatapp.repository.UserRepository;
 import com.kma.project.chatapp.service.MailService;
 import com.kma.project.chatapp.service.RefreshTokenService;
@@ -41,8 +40,7 @@ public class AuthController {
     @ApiOperation(value = "Đăng kí")
     @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
-        userService.signUp(request);
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+        return ResponseEntity.ok(userService.signUp(request));
     }
 
     @ApiOperation(value = "Refresh token")

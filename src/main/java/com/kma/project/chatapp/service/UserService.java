@@ -1,13 +1,13 @@
 package com.kma.project.chatapp.service;
 
 import com.kma.project.chatapp.dto.request.*;
-import com.kma.project.chatapp.dto.response.JwtResponse;
+import com.kma.project.chatapp.exception.AppResponseDto;
 
 public interface UserService {
 
-    void signUp(SignUpRequest signupRequest);
+    AppResponseDto signUp(SignUpRequest signupRequest);
 
-    JwtResponse signIn(LoginRequest loginRequest);
+    AppResponseDto signIn(LoginRequest loginRequest);
 
     void verifyOtp(OtpRequestDto otpRequestDto);
 
