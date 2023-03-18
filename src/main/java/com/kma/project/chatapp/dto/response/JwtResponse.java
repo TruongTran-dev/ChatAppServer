@@ -22,6 +22,9 @@ public class JwtResponse {
     private String email;
     private List<String> roles;
 
+    private String expiredDate;
+
+
     public JwtResponse(String accessToken, String refreshToken, Long id, String username, String email, List<String> roles) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

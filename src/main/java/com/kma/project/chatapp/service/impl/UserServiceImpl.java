@@ -15,6 +15,7 @@ import com.kma.project.chatapp.security.services.UserDetailsImpl;
 import com.kma.project.chatapp.service.RefreshTokenService;
 import com.kma.project.chatapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,10 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +44,9 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+
+    @Value("${viet.app.jwtExpirationMs}")
+    private int jwtExpirationMs;
 
     @Transactional
     @Override
@@ -97,7 +98,10 @@ public class UserServiceImpl implements UserService {
                 .id(userDetails.getId())
                 .username(userDetails.getUsername())
                 .email(userDetails.getEmail())
-                .accessToken(jwt).build();
+                .accessToken(jwt)
+                .expiredDate(new Date((new Date()).getTime() + jwtExpirationMs).toString())
+                .build();
+
         return AppResponseDto.builder().data(jwtResponse).httpStatus(200).message("Đăng nhập thành công").build();
     }
 
