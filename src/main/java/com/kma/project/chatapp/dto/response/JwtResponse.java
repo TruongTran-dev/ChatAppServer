@@ -26,6 +26,8 @@ public class JwtResponse {
 
     private String expiredRefreshDate;
 
+    private Boolean isFillProfileKey;
+
 
     public JwtResponse(String accessToken, String refreshToken, Long id, String username, String email, List<String> roles) {
         this.accessToken = accessToken;

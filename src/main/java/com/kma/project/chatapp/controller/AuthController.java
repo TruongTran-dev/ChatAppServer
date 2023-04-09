@@ -40,7 +40,7 @@ public class AuthController {
 
     @ApiOperation(value = "Đăng kí")
     @PostMapping("/sign-up")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest request) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserInputDto request) {
         return ResponseEntity.ok(userService.signUp(request));
     }
 

@@ -26,7 +26,7 @@ spring:
 
 viet:
   app:
-    jwtExpirationMs: 600000
+    jwtExpirationMs: 120000
     jwtRefreshExpirationMs: 86400000
     jwtSecret: helohehehihi
 

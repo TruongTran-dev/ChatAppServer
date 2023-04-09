@@ -38,6 +38,14 @@ public class UserEntity {
 
     private String otp;
 
+    @Column(name = "full_name")
+    private String fullName;
+
+    private String phone;
+
+    @Column(name = "is_fill_profile_key")
+    private Boolean isFillProfileKey;
+
     public UserEntity(String username, String email, String encode) {
         this.username = username;
         this.email = email;
