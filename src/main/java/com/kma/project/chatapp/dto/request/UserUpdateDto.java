@@ -25,7 +25,7 @@ public class UserUpdateDto {
 
     private String confirmPassword;
 
-    private List<String> role;
+    private List<String> roles;
 
     private String fullName;
 

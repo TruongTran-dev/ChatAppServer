@@ -205,8 +205,8 @@ public class UserServiceImpl implements UserService {
         }
 
         Set<RoleEntity> roles = new HashSet<>();
-        if (!dto.getRole().isEmpty()) {
-            for (String item : dto.getRole()) {
+        if (!dto.getRoles().isEmpty()) {
+            for (String item : dto.getRoles()) {
                 RoleEntity userRole = roleRepository.findByName(ERole.valueOf(item))
                         .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.role-not-exist")).build());
                 roles.add(userRole);
