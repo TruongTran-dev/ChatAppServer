@@ -122,6 +122,7 @@ public class UserServiceImpl implements UserService {
                 .accessToken(jwt)
                 .expiredAccessDate(localDate.toString())
                 .expiredRefreshDate(refreshToken.getExpiryDate().toString())
+                .roles(roles)
                 .isFillProfileKey(userDetails.getIsFillProfileKey())
                 .build();
 
