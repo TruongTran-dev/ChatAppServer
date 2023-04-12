@@ -19,7 +19,7 @@ public interface UserService {
 
     PageResponse<UserOutputDto> getAllUser(Integer page, Integer size, String sort, String search);
 
-    UserOutputDto updateUser(Long userId, UserInputDto dto);
+    UserOutputDto updateUser(Long userId, UserUpdateDto dto);
 
     void delete(Long userId);
 

@@ -32,9 +32,9 @@ viet:
     jwtExpirationMs: 6000000
     jwtRefreshExpirationMs: 86400000
     jwtSecret: helohehehihi
-    cloud_name: drul2rlhe
-    api_key: 624968573896295
-    api_secret: wJchJWfJ8iUNXsYVoM__61YaTzI
+    cloud_name: dimdlrse2
+    api_key: 421331454431998
+    api_secret: 51sGIP0Nw0ZbyfRlp9XqohYZLKk
 
 email:
   fromEmail: bookingcare666@gmail.com

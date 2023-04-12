@@ -1,6 +1,7 @@
 package com.kma.project.chatapp.controller;
 
 import com.kma.project.chatapp.dto.request.UserInputDto;
+import com.kma.project.chatapp.dto.request.UserUpdateDto;
 import com.kma.project.chatapp.dto.response.PageResponse;
 import com.kma.project.chatapp.dto.response.UserOutputDto;
 import com.kma.project.chatapp.service.UserService;
@@ -34,7 +35,7 @@ public class UserController {
 
     @ApiOperation(value = "Cập nhật tài khoản")
     @PutMapping("{id}")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UserInputDto request, @PathVariable("id") Long userId) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDto request, @PathVariable("id") Long userId) {
         return ResponseEntity.ok(userService.updateUser(userId, request));
     }
 
