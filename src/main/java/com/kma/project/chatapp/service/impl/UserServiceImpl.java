@@ -70,13 +70,17 @@ public class UserServiceImpl implements UserService {
             throw AppException.builder().errorCodes(Collections.singletonList("error.email-exist")).build();
         }
         // Create new user's account
-        UserEntity userEntity = userMapper.convertToEntity(inputDto);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(inputDto.getUsername());
+        userEntity.setEmail(inputDto.getEmail());
+        userEntity.setFullName(inputDto.getFullName());
+        userEntity.setPhone(inputDto.getPhone());
         userEntity.setPassword(passwordEncoder.encode(inputDto.getPassword()));
         userEntity.setIsFillProfileKey(false);
         Set<RoleEntity> roles = new HashSet<>();
         RoleEntity userRole;
-        if (!inputDto.getRole().isEmpty()) {
-            for (String item : inputDto.getRole()) {
+        if (!inputDto.getRoles().isEmpty()) {
+            for (String item : inputDto.getRoles()) {
                 userRole = roleRepository.findByName(ERole.valueOf(item))
                         .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.role-not-exist")).build());
                 roles.add(userRole);

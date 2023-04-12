@@ -31,7 +31,7 @@ public class UserInputDto {
     @Size(min = 6, max = 40, message = "{error.password-not-valid}")
     private String confirmPassword;
 
-    private List<String> role;
+    private List<String> roles;
 
     private String fullName;
 
