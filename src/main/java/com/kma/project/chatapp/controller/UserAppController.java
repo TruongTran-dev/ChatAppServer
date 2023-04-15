@@ -1,9 +1,6 @@
 package com.kma.project.chatapp.controller;
 
-import com.kma.project.chatapp.dto.request.auth.UserInputDto;
 import com.kma.project.chatapp.dto.request.auth.UserUpdateDto;
-import com.kma.project.chatapp.dto.response.auth.PageResponse;
-import com.kma.project.chatapp.dto.response.auth.UserOutputDto;
 import com.kma.project.chatapp.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,23 +12,11 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/admin/users")
-@Api(tags = "Quản lí người dùng")
-public class UserController {
+@RequestMapping("/api/v1/users")
+@Api(tags = "Quản lí người dùng App")
+public class UserAppController {
     @Autowired
     UserService userService;
-
-    @ApiOperation(value = "Thêm mới tài khoản")
-    @PostMapping("/sign-up")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserInputDto request) {
-        return ResponseEntity.ok(userService.signUp(request));
-    }
-
-    @ApiOperation(value = "Lấy danh sách tài khoản")
-    @GetMapping
-    public PageResponse<UserOutputDto> getAllUser(Integer page, Integer size, String sort, String search) {
-        return userService.getAllUser(page, size, sort, search);
-    }
 
     @ApiOperation(value = "Cập nhật tài khoản")
     @PutMapping("{id}")
@@ -39,17 +24,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(userId, request));
     }
 
-    @ApiOperation(value = "Xóa tài khoản")
-    @DeleteMapping("{id}")
-    public void deleteUser(@PathVariable("id") Long userId) {
-        userService.delete(userId);
-    }
-
     @ApiOperation(value = "Lấy chi tiết tài khoản")
-    @GetMapping("/detail/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<?> getDetailUser(@PathVariable("id") Long userId) {
         return ResponseEntity.ok(userService.getDetailUser(userId));
     }
-
 
 }

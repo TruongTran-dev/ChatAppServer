@@ -1,9 +1,9 @@
 package com.kma.project.chatapp.service.impl;
 
-import com.kma.project.chatapp.dto.request.*;
-import com.kma.project.chatapp.dto.response.JwtResponse;
-import com.kma.project.chatapp.dto.response.PageResponse;
-import com.kma.project.chatapp.dto.response.UserOutputDto;
+import com.kma.project.chatapp.dto.request.auth.*;
+import com.kma.project.chatapp.dto.response.auth.JwtResponse;
+import com.kma.project.chatapp.dto.response.auth.PageResponse;
+import com.kma.project.chatapp.dto.response.auth.UserOutputDto;
 import com.kma.project.chatapp.entity.RefreshToken;
 import com.kma.project.chatapp.entity.RoleEntity;
 import com.kma.project.chatapp.entity.UserEntity;
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setIsFillProfileKey(false);
         Set<RoleEntity> roles = new HashSet<>();
         RoleEntity userRole;
-        if (!inputDto.getRoles().isEmpty()) {
+        if (inputDto.getRoles() != null && !inputDto.getRoles().isEmpty()) {
             for (String item : inputDto.getRoles()) {
                 userRole = roleRepository.findByName(ERole.valueOf(item))
                         .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.role-not-exist")).build());
@@ -209,19 +209,25 @@ public class UserServiceImpl implements UserService {
         }
 
         Set<RoleEntity> roles = new HashSet<>();
-        if (!dto.getRoles().isEmpty()) {
+        if (dto.getRoles() != null && !dto.getRoles().isEmpty()) {
             for (String item : dto.getRoles()) {
                 RoleEntity userRole = roleRepository.findByName(ERole.valueOf(item))
                         .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.role-not-exist")).build());
                 roles.add(userRole);
             }
+            userEntity.setRoles(roles);
         }
-        userEntity.setRoles(roles);
         if (dto.getPhone() != null) {
             userEntity.setPhone(dto.getPhone());
         }
         if (dto.getFullName() != null) {
             userEntity.setFullName(dto.getFullName());
+        }
+        if (dto.getIsFillProfileKey() != null) {
+            userEntity.setIsFillProfileKey(dto.getIsFillProfileKey());
+        }
+        if (dto.getFileUrl() != null) {
+            userEntity.setFileUrl(dto.getFileUrl());
         }
         userRepository.save(userEntity);
         return userMapper.convertToDto(userEntity);

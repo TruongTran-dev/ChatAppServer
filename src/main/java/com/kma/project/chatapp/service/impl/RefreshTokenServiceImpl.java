@@ -1,7 +1,7 @@
 package com.kma.project.chatapp.service.impl;
 
-import com.kma.project.chatapp.dto.request.TokenRefreshRequest;
-import com.kma.project.chatapp.dto.response.TokenRefreshResponse;
+import com.kma.project.chatapp.dto.request.auth.TokenRefreshRequest;
+import com.kma.project.chatapp.dto.response.auth.TokenRefreshResponse;
 import com.kma.project.chatapp.entity.RefreshToken;
 import com.kma.project.chatapp.entity.UserEntity;
 import com.kma.project.chatapp.exception.AppException;

@@ -1,6 +1,6 @@
 package com.kma.project.chatapp.utils;
 
-import com.kma.project.chatapp.dto.response.PageResponse;
+import com.kma.project.chatapp.dto.response.auth.PageResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

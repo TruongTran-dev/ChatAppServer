@@ -1,4 +1,4 @@
-package com.kma.project.chatapp.dto.request;
+package com.kma.project.chatapp.dto.request.cms;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

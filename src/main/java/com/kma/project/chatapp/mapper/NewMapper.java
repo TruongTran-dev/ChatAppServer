@@ -1,7 +1,7 @@
 package com.kma.project.chatapp.mapper;
 
-import com.kma.project.chatapp.dto.request.NewRequestDto;
-import com.kma.project.chatapp.dto.response.NewResponseDto;
+import com.kma.project.chatapp.dto.request.cms.NewRequestDto;
+import com.kma.project.chatapp.dto.response.cms.NewResponseDto;
 import com.kma.project.chatapp.entity.NewEntity;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

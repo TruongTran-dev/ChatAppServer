@@ -1,8 +1,8 @@
 package com.kma.project.chatapp.service;
 
-import com.kma.project.chatapp.dto.request.*;
-import com.kma.project.chatapp.dto.response.PageResponse;
-import com.kma.project.chatapp.dto.response.UserOutputDto;
+import com.kma.project.chatapp.dto.request.auth.*;
+import com.kma.project.chatapp.dto.response.auth.PageResponse;
+import com.kma.project.chatapp.dto.response.auth.UserOutputDto;
 import com.kma.project.chatapp.exception.AppResponseDto;
 
 public interface UserService {

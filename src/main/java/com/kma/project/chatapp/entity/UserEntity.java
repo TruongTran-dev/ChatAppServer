@@ -46,6 +46,9 @@ public class UserEntity extends BaseEntity {
     @Column(name = "is_fill_profile_key")
     private Boolean isFillProfileKey;
 
+    @Column(name = "file_url")
+    private String fileUrl;
+
     public UserEntity(String username, String email, String encode) {
         this.username = username;
         this.email = email;

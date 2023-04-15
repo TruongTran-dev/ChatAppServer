@@ -1,8 +1,8 @@
 package com.kma.project.chatapp.controller;
 
-import com.kma.project.chatapp.dto.request.NewRequestDto;
-import com.kma.project.chatapp.dto.response.NewResponseDto;
-import com.kma.project.chatapp.dto.response.PageResponse;
+import com.kma.project.chatapp.dto.request.cms.NewRequestDto;
+import com.kma.project.chatapp.dto.response.auth.PageResponse;
+import com.kma.project.chatapp.dto.response.cms.NewResponseDto;
 import com.kma.project.chatapp.service.NewService;
 import com.kma.project.chatapp.service.UploadFileService;
 import io.swagger.annotations.Api;

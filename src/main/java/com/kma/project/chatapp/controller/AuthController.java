@@ -1,6 +1,6 @@
 package com.kma.project.chatapp.controller;
 
-import com.kma.project.chatapp.dto.request.*;
+import com.kma.project.chatapp.dto.request.auth.*;
 import com.kma.project.chatapp.exception.AppResponseDto;
 import com.kma.project.chatapp.repository.UserRepository;
 import com.kma.project.chatapp.service.MailService;

@@ -1,4 +1,4 @@
-package com.kma.project.chatapp.dto.response;
+package com.kma.project.chatapp.dto.response.mobile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.kma.project.chatapp.dto.request;
+package com.kma.project.chatapp.dto.request.auth;
 
 import lombok.Data;
 

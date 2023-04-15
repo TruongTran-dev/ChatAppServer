@@ -1,8 +1,8 @@
 package com.kma.project.chatapp.service.impl;
 
-import com.kma.project.chatapp.dto.request.NewRequestDto;
-import com.kma.project.chatapp.dto.response.NewResponseDto;
-import com.kma.project.chatapp.dto.response.PageResponse;
+import com.kma.project.chatapp.dto.request.cms.NewRequestDto;
+import com.kma.project.chatapp.dto.response.auth.PageResponse;
+import com.kma.project.chatapp.dto.response.cms.NewResponseDto;
 import com.kma.project.chatapp.entity.NewEntity;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.mapper.NewMapper;

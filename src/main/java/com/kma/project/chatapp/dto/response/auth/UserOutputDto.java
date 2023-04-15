@@ -1,4 +1,4 @@
-package com.kma.project.chatapp.dto.response;
+package com.kma.project.chatapp.dto.response.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -26,5 +26,7 @@ public class UserOutputDto {
     private String phone;
 
     private Boolean isFillProfileKey;
+
+    private String fileUrl;
 
 }
