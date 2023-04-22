@@ -21,4 +21,6 @@ public class StudentRequestDto {
 
     private Long classId;
 
+    private String semesterYear; // 2022-2023
+
 }

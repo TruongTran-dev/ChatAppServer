@@ -39,6 +39,12 @@ public class ClassController {
         return ResponseEntity.ok(service.update(id, request));
     }
 
+    @ApiOperation(value = "Lấy chi tiết lớp học")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getDetail(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.getDetail(id));
+    }
+
     @ApiOperation(value = "Xóa lớp học")
     @DeleteMapping("{id}")
     public void deleteClass(@PathVariable("id") Long id) {

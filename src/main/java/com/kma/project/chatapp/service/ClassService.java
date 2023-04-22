@@ -10,6 +10,8 @@ public interface ClassService {
 
     ClassResponseDto update(Long id, ClassRequestDto dto);
 
+    ClassResponseDto getDetail(Long id);
+
     void delete(Long id);
 
     PageResponse<ClassResponseDto> getAllClass(Integer page, Integer size, String sort, String search);

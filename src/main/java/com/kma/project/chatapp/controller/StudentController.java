@@ -2,7 +2,7 @@ package com.kma.project.chatapp.controller;
 
 import com.kma.project.chatapp.dto.request.cms.StudentRequestDto;
 import com.kma.project.chatapp.dto.response.auth.PageResponse;
-import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
+import com.kma.project.chatapp.dto.response.cms.StudentLearningResultResponseDto;
 import com.kma.project.chatapp.service.StudentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,8 +29,9 @@ public class StudentController {
 
     @ApiOperation(value = "Lấy danh sách học sinh")
     @GetMapping
-    public PageResponse<StudentResponseDto> getAllStudent(Integer page, Integer size, String sort, String search, @RequestParam Long classId) {
-        return service.getAllStudent(page, size, sort, search, classId);
+    public PageResponse<StudentLearningResultResponseDto> getAllStudent(Integer page, Integer size, String sort,
+                                                                        String search, String semesterYear, @RequestParam Long classId) {
+        return service.getAllStudent(page, size, sort, search, semesterYear, classId);
     }
 
     @ApiOperation(value = "Cập nhật học sinh")

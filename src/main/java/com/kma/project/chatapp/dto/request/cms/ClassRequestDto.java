@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +16,9 @@ public class ClassRequestDto {
     private String code;
 
     private String name;
+
+    private String year;
+
+    private List<Long> subjectIds;
 
 }

@@ -22,6 +22,8 @@ public class ClassEntity extends BaseEntity {
 
     private String name;
 
+    private String year;
+
     @OneToMany(mappedBy = "classEntity")
     private List<StudentEntity> studentList;
 
