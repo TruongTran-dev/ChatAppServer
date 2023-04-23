@@ -114,11 +114,27 @@ public class ClassServiceImpl implements ClassService {
         repositoy.delete(entity);
     }
 
+    public ClassResponseDto mapToDto(ClassEntity entity) {
+        List<ClassSubjectMapEntity> classSubjectMapEntities = classSubjectMapRepository.findAllByClassId(entity.getId());
+
+        List<Long> subjectIds = new ArrayList<>();
+        classSubjectMapEntities.forEach(classSubjectMapEntity -> {
+            subjectIds.add(classSubjectMapEntity.getSubjectId());
+        });
+
+        List<SubjectEntity> subjectEntityList = subjectRepositoy.findAllById(subjectIds);
+
+        ClassResponseDto classResponseDto = mapper.convertToDto(entity);
+        classResponseDto.setSubjectDatas(subjectEntityList.stream().map(entity1 -> subjectMapper.convertToDto(entity1)).collect(Collectors.toList()));
+
+        return classResponseDto;
+    }
+
     @Transactional
     @Override
     public PageResponse<ClassResponseDto> getAllClass(Integer page, Integer size, String sort, String search) {
         Pageable pageable = PageUtils.customPageable(page, size, sort);
         Page<ClassEntity> pageEntity = repositoy.findAllByNameLikeIgnoreCase(pageable, PageUtils.buildSearch(search));
-        return PageUtils.formatPageResponse(pageEntity.map(entity -> mapper.convertToDto(entity)));
+        return PageUtils.formatPageResponse(pageEntity.map(this::mapToDto));
     }
 }
