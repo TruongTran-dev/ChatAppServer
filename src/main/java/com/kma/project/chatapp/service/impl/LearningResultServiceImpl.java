@@ -64,6 +64,9 @@ public class LearningResultServiceImpl implements LearningResultService {
                 .getAllResultDetail(studentId, semesterYear, 1);
         Float subjectSemesterScore1 = 0f;
         for (LearningResultDetailResponseDto item : resultDetailResponse1) {
+            if (item.getSemesterSummaryScore() == null) {
+                item.setSemesterSummaryScore(0f);
+            }
             subjectSemesterScore1 += item.getSemesterSummaryScore();
         }
 
@@ -72,6 +75,9 @@ public class LearningResultServiceImpl implements LearningResultService {
                 .getAllResultDetail(studentId, semesterYear, 2);
         Float subjectSemesterScore2 = 0f;
         for (LearningResultDetailResponseDto item : resultDetailResponse2) {
+            if (item.getSemesterSummaryScore() == null) {
+                item.setSemesterSummaryScore(0f);
+            }
             subjectSemesterScore2 += item.getSemesterSummaryScore();
         }
 
