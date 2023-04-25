@@ -17,7 +17,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
             " from StudentEntity s " +
             " join LearningResultEntity l on s.id = l.studentId " +
             " join ClassEntity c on s.classEntity.id = c.id" +
-            " where (:year is null or l.year = :year) and c.id = :classId ")
+            " where (:year is null or l.year = :year) and (:classId is null or c.id = :classId) ")
     Page<StudentLearningResultResponseDto> findAllStudent(Pageable pageable, String year, Long classId);
 }
 
