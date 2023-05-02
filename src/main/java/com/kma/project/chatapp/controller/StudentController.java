@@ -30,7 +30,8 @@ public class StudentController {
     @ApiOperation(value = "Lấy danh sách học sinh")
     @GetMapping
     public PageResponse<StudentLearningResultResponseDto> getAllStudent(Integer page, Integer size, String sort,
-                                                                        String search, String semesterYear, @RequestParam Long classId) {
+                                                                        String search, String semesterYear,
+                                                                        @RequestParam(required = false) Long classId) {
         return service.getAllStudent(page, size, sort, search, semesterYear, classId);
     }
 
