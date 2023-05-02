@@ -108,6 +108,15 @@ public class StudentServiceImpl implements StudentService {
         return mapper.convertToDto(repositoy.save(entity));
     }
 
+    @Override
+    public StudentResponseDto getDetail(Long id) {
+        StudentEntity entity = repositoy.findById(id)
+                .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
+        StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
+        studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));
+        return studentResponseDto;
+    }
+
     @Transactional
     @Override
     public void delete(Long id) {

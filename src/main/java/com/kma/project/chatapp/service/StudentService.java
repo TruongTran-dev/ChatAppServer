@@ -11,6 +11,8 @@ public interface StudentService {
 
     StudentResponseDto update(Long id, StudentRequestDto dto);
 
+    StudentResponseDto getDetail(Long id);
+
     void delete(Long id);
 
     PageResponse<StudentLearningResultResponseDto> getAllStudent(Integer page, Integer size, String sort, String search

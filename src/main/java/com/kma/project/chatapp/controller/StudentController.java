@@ -46,4 +46,10 @@ public class StudentController {
         service.delete(id);
     }
 
+    @ApiOperation(value = "Lấy chi tiết học sinh")
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getDetailStudent(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.getDetail(id));
+    }
+
 }
