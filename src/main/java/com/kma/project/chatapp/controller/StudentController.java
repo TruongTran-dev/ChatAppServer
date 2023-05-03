@@ -49,8 +49,8 @@ public class StudentController {
 
     @ApiOperation(value = "Lấy chi tiết học sinh")
     @GetMapping("/detail/{id}")
-    public ResponseEntity<?> getDetailStudent(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(service.getDetail(id));
+    public ResponseEntity<?> getDetailStudent(@PathVariable("id") Long id, String semesterYear) {
+        return ResponseEntity.ok(service.getDetail(id, semesterYear));
     }
 
 }

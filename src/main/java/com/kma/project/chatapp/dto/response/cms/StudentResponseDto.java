@@ -23,4 +23,10 @@ public class StudentResponseDto {
 
     private ClassResponseDto classResponse;
 
+    private Float mediumScore; // điểm trung bình môn cả năm
+
+    private Float hk1SubjectMediumScore; // điểm trung bình các môn học kì 1
+
+    private Float hk2SubjectMediumScore; // điểm trung bình các môn học kì 2
+
 }

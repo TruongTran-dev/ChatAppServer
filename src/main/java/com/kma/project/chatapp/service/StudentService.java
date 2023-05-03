@@ -11,7 +11,7 @@ public interface StudentService {
 
     StudentResponseDto update(Long id, StudentRequestDto dto);
 
-    StudentResponseDto getDetail(Long id);
+    StudentResponseDto getDetail(Long id, String semesterYear);
 
     void delete(Long id);
 

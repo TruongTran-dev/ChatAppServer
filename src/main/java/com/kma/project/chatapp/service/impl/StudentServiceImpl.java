@@ -109,11 +109,21 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public StudentResponseDto getDetail(Long id) {
+    public StudentResponseDto getDetail(Long id, String semesterYear) {
         StudentEntity entity = repositoy.findById(id)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
         StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
         studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));
+
+        if (semesterYear != null) {
+            LearningResultEntity learningResultEntity = learningResultRepository.findByStudentIdAndYear(id, semesterYear);
+            if (learningResultEntity != null) {
+                studentResponseDto.setMediumScore(learningResultEntity.getMediumScore());
+                studentResponseDto.setHk1SubjectMediumScore(learningResultEntity.getHk1SubjectMediumScore());
+                studentResponseDto.setHk2SubjectMediumScore(learningResultEntity.getHk2SubjectMediumScore());
+            }
+        }
+
         return studentResponseDto;
     }
 
