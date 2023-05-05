@@ -35,4 +35,6 @@ public class UserUpdateDto {
 
     private String fileUrl;
 
+    private List<Long> studentIds;
+
 }

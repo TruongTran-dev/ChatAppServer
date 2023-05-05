@@ -8,6 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
 public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
 
     Page<StudentEntity> findAllByNameLikeIgnoreCaseAndClassEntity(Pageable pageable, String name, ClassEntity classEntity);
@@ -19,5 +23,9 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
             " join ClassEntity c on s.classEntity.id = c.id" +
             " where (:year is null or l.year = :year) and (:classId is null or c.id = :classId) ")
     Page<StudentLearningResultResponseDto> findAllStudent(Pageable pageable, String year, Long classId);
+
+    Optional<StudentEntity> findByCode(String code);
+
+    List<StudentEntity> findAllByIdIn(Collection<Long> studentIds);
 }
 

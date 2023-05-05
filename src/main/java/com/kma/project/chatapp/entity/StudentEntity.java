@@ -18,6 +18,8 @@ public class StudentEntity extends BaseEntity {
 
     private String name;
 
+    private String code;
+
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 

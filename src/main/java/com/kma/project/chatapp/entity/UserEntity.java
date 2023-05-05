@@ -1,9 +1,13 @@
 package com.kma.project.chatapp.entity;
 
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,6 +22,15 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@TypeDefs(
+
+        {
+                @TypeDef(
+                        name = "string-array",
+                        typeClass = StringArrayType.class
+                )
+        }
+)
 public class UserEntity extends BaseEntity {
 
     @Id
@@ -48,6 +61,10 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "file_url")
     private String fileUrl;
+
+    @Column(name = "student_ids", columnDefinition = "varchar[]")
+    @Type(type = "string-array")
+    private String[] studentIds;
 
     public UserEntity(String username, String email, String encode) {
         this.username = username;

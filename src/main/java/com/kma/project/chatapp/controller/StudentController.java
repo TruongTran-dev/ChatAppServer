@@ -53,4 +53,10 @@ public class StudentController {
         return ResponseEntity.ok(service.getDetail(id, semesterYear));
     }
 
+    @ApiOperation(value = "Tìm học sinh bằng SSID")
+    @GetMapping("/detail")
+    public ResponseEntity<?> findByCode(@RequestParam String code) {
+        return ResponseEntity.ok(service.getDetailByCode(code));
+    }
+
 }

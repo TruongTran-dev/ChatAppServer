@@ -13,6 +13,9 @@ public interface StudentService {
 
     StudentResponseDto getDetail(Long id, String semesterYear);
 
+    StudentResponseDto getDetailByCode(String code);
+
+
     void delete(Long id);
 
     PageResponse<StudentLearningResultResponseDto> getAllStudent(Integer page, Integer size, String sort, String search

@@ -1,10 +1,12 @@
 package com.kma.project.chatapp.dto.response.auth;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -28,5 +30,7 @@ public class UserOutputDto {
     private Boolean isFillProfileKey;
 
     private String fileUrl;
+
+    private List<StudentResponseDto> students;
 
 }

@@ -57,7 +57,8 @@ public class StudentServiceImpl implements StudentService {
         StudentEntity entity = mapper.convertToEntity(dto);
         entity.setClassEntity(classEntity);
         repositoy.save(entity);
-
+        entity.setCode("SSID" + "00" + entity.getId());
+        repositoy.save(entity);
         // thêm mới kết quả học tập
         LearningResultEntity learningResultEntity = LearningResultEntity.builder()
                 .studentId(entity.getId())
@@ -124,6 +125,16 @@ public class StudentServiceImpl implements StudentService {
             }
         }
 
+        return studentResponseDto;
+    }
+
+    @Override
+    public StudentResponseDto getDetailByCode(String code) {
+        StudentEntity entity = repositoy.findByCode(code)
+                .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
+
+        StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
+        studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));
         return studentResponseDto;
     }
 

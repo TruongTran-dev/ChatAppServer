@@ -4,14 +4,17 @@ import com.kma.project.chatapp.dto.request.auth.*;
 import com.kma.project.chatapp.dto.response.auth.JwtResponse;
 import com.kma.project.chatapp.dto.response.auth.PageResponse;
 import com.kma.project.chatapp.dto.response.auth.UserOutputDto;
+import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
 import com.kma.project.chatapp.entity.RefreshToken;
 import com.kma.project.chatapp.entity.RoleEntity;
 import com.kma.project.chatapp.entity.UserEntity;
 import com.kma.project.chatapp.enums.ERole;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.exception.AppResponseDto;
+import com.kma.project.chatapp.mapper.StudentMapper;
 import com.kma.project.chatapp.mapper.UserMapper;
 import com.kma.project.chatapp.repository.RoleRepository;
+import com.kma.project.chatapp.repository.StudentRepository;
 import com.kma.project.chatapp.repository.UserRepository;
 import com.kma.project.chatapp.security.jwt.JwtUtils;
 import com.kma.project.chatapp.security.services.UserDetailsImpl;
@@ -54,7 +57,13 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     @Value("${viet.app.jwtExpirationMs}")
     private int jwtExpirationMs;
@@ -188,6 +197,7 @@ public class UserServiceImpl implements UserService {
     public UserOutputDto updateUser(Long userId, UserUpdateDto dto) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.entity-not-found")).build());
+        userMapper.update(dto, userEntity);
         if (!userEntity.getUsername().equals(dto.getUsername()) && dto.getUsername() != null) {
             if (userRepository.existsByUsername(dto.getUsername())) {
                 throw AppException.builder().errorCodes(Collections.singletonList("error.username-exist")).build();
@@ -217,18 +227,6 @@ public class UserServiceImpl implements UserService {
             }
             userEntity.setRoles(roles);
         }
-        if (dto.getPhone() != null) {
-            userEntity.setPhone(dto.getPhone());
-        }
-        if (dto.getFullName() != null) {
-            userEntity.setFullName(dto.getFullName());
-        }
-        if (dto.getIsFillProfileKey() != null) {
-            userEntity.setIsFillProfileKey(dto.getIsFillProfileKey());
-        }
-        if (dto.getFileUrl() != null) {
-            userEntity.setFileUrl(dto.getFileUrl());
-        }
         userRepository.save(userEntity);
         return userMapper.convertToDto(userEntity);
     }
@@ -245,6 +243,15 @@ public class UserServiceImpl implements UserService {
     public UserOutputDto getDetailUser(Long userId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.entity-not-found")).build());
-        return userMapper.convertToDto(userEntity);
+        UserOutputDto outputDto = userMapper.convertToDto(userEntity);
+
+        Set<Long> studentIds = new HashSet<>();
+        for (String item : userEntity.getStudentIds()) {
+            studentIds.add(Long.valueOf(item));
+        }
+        List<StudentResponseDto> studentOutputs = studentRepository.findAllByIdIn(studentIds).stream().map(studentMapper::convertToDto)
+                .collect(Collectors.toList());
+        outputDto.setStudents(studentOutputs);
+        return outputDto;
     }
 }
