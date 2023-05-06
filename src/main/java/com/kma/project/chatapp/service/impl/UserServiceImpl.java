@@ -245,13 +245,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.entity-not-found")).build());
         UserOutputDto outputDto = userMapper.convertToDto(userEntity);
 
-        Set<Long> studentIds = new HashSet<>();
-        for (String item : userEntity.getStudentIds()) {
-            studentIds.add(Long.valueOf(item));
+        if (userEntity.getStudentIds() != null) {
+            Set<Long> studentIds = new HashSet<>();
+            for (String item : userEntity.getStudentIds()) {
+                studentIds.add(Long.valueOf(item));
+            }
+            List<StudentResponseDto> studentOutputs = studentRepository.findAllByIdIn(studentIds).stream().map(studentMapper::convertToDto)
+                    .collect(Collectors.toList());
+            outputDto.setStudents(studentOutputs);
         }
-        List<StudentResponseDto> studentOutputs = studentRepository.findAllByIdIn(studentIds).stream().map(studentMapper::convertToDto)
-                .collect(Collectors.toList());
-        outputDto.setStudents(studentOutputs);
         return outputDto;
     }
 }
