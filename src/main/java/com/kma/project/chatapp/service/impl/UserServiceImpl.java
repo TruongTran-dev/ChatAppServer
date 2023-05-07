@@ -227,8 +227,9 @@ public class UserServiceImpl implements UserService {
             }
             userEntity.setRoles(roles);
         }
-        userRepository.save(userEntity);
-        return userMapper.convertToDto(userEntity);
+        UserOutputDto outputDto = userMapper.convertToDto(userEntity);
+        mapStudentResponse(outputDto, userEntity);
+        return outputDto;
     }
 
     @Transactional
@@ -244,7 +245,11 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.entity-not-found")).build());
         UserOutputDto outputDto = userMapper.convertToDto(userEntity);
+        mapStudentResponse(outputDto, userEntity);
+        return outputDto;
+    }
 
+    public void mapStudentResponse(UserOutputDto outputDto, UserEntity userEntity) {
         if (userEntity.getStudentIds() != null) {
             Set<Long> studentIds = new HashSet<>();
             for (String item : userEntity.getStudentIds()) {
@@ -254,6 +259,6 @@ public class UserServiceImpl implements UserService {
                     .collect(Collectors.toList());
             outputDto.setStudents(studentOutputs);
         }
-        return outputDto;
     }
+
 }
