@@ -92,7 +92,9 @@ public class StudentServiceImpl implements StudentService {
         }
         learningResultDetailRepository.saveAll(learningResultDetailEntityList);
 
-        return mapper.convertToDto(entity);
+        StudentResponseDto responseDto = mapper.convertToDto(entity);
+        responseDto.setClassName(classEntity.getName());
+        return responseDto;
     }
 
     @Transactional
@@ -100,13 +102,15 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDto update(Long id, StudentRequestDto dto) {
         StudentEntity entity = repositoy.findById(id)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
-        if (!Objects.equals(entity.getClassEntity().getId(), dto.getClassId())) {
+        if (dto.getClassId() != null && !Objects.equals(entity.getClassEntity().getId(), dto.getClassId())) {
             ClassEntity classEntity = classRepository.findById(dto.getClassId())
                     .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.class-not-found")).build());
             entity.setClassEntity(classEntity);
         }
         mapper.update(dto, entity);
-        return mapper.convertToDto(repositoy.save(entity));
+        StudentResponseDto responseDto = mapper.convertToDto(entity);
+        responseDto.setClassName(entity.getClassEntity().getName());
+        return responseDto;
     }
 
     @Override
@@ -115,6 +119,7 @@ public class StudentServiceImpl implements StudentService {
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
         StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
         studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));
+        studentResponseDto.setClassName(entity.getClassEntity().getName());
 
         if (semesterYear != null) {
             LearningResultEntity learningResultEntity = learningResultRepository.findByStudentIdAndYear(id, semesterYear);
@@ -135,6 +140,7 @@ public class StudentServiceImpl implements StudentService {
 
         StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
         studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));
+        studentResponseDto.setClassName(entity.getClassEntity().getName());
         return studentResponseDto;
     }
 

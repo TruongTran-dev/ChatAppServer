@@ -25,6 +25,8 @@ public class StudentResponseDto {
 
     private ClassResponseDto classResponse;
 
+    private String className;
+
     private Float mediumScore; // điểm trung bình môn cả năm
 
     private Float hk1SubjectMediumScore; // điểm trung bình các môn học kì 1
