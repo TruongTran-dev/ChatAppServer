@@ -4,15 +4,19 @@ import com.kma.project.chatapp.dto.request.auth.*;
 import com.kma.project.chatapp.dto.response.auth.JwtResponse;
 import com.kma.project.chatapp.dto.response.auth.PageResponse;
 import com.kma.project.chatapp.dto.response.auth.UserOutputDto;
+import com.kma.project.chatapp.dto.response.cms.ClassResponseDto;
 import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
 import com.kma.project.chatapp.entity.RefreshToken;
 import com.kma.project.chatapp.entity.RoleEntity;
+import com.kma.project.chatapp.entity.StudentEntity;
 import com.kma.project.chatapp.entity.UserEntity;
 import com.kma.project.chatapp.enums.ERole;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.exception.AppResponseDto;
+import com.kma.project.chatapp.mapper.ClassMapper;
 import com.kma.project.chatapp.mapper.StudentMapper;
 import com.kma.project.chatapp.mapper.UserMapper;
+import com.kma.project.chatapp.repository.ClassRepository;
 import com.kma.project.chatapp.repository.RoleRepository;
 import com.kma.project.chatapp.repository.StudentRepository;
 import com.kma.project.chatapp.repository.UserRepository;
@@ -58,6 +62,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private ClassRepository classRepository;
+
+    @Autowired
+    private ClassMapper classMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -255,8 +265,17 @@ public class UserServiceImpl implements UserService {
             for (String item : userEntity.getStudentIds()) {
                 studentIds.add(Long.valueOf(item));
             }
-            List<StudentResponseDto> studentOutputs = studentRepository.findAllByIdIn(studentIds).stream().map(studentMapper::convertToDto)
-                    .collect(Collectors.toList());
+            List<StudentEntity> studentEntities = studentRepository.findAllByIdIn(studentIds);
+            List<StudentResponseDto> studentOutputs = new ArrayList<>();
+            for (StudentEntity studentEntity : studentEntities) {
+                StudentResponseDto studentResponseDto = studentMapper.convertToDto(studentEntity);
+                if (studentEntity.getClassEntity() != null) {
+                    ClassResponseDto classResponseDto = classMapper.convertToDto(studentEntity.getClassEntity());
+                    studentResponseDto.setClassResponse(classResponseDto);
+                    studentResponseDto.setClassName(classResponseDto.getName());
+                }
+                studentOutputs.add(studentResponseDto);
+            }
             outputDto.setStudents(studentOutputs);
         }
     }
