@@ -16,7 +16,7 @@ public interface StudentRepository extends JpaRepository<StudentEntity, Long> {
 
     Page<StudentEntity> findAllByNameLikeIgnoreCaseAndClassEntity(Pageable pageable, String name, ClassEntity classEntity);
 
-    @Query(value = " select new com.kma.project.chatapp.dto.response.cms.StudentLearningResultResponseDto(s.id, s.name, " +
+    @Query(value = " select new com.kma.project.chatapp.dto.response.cms.StudentLearningResultResponseDto(s.id, s.name, s.code, " +
             " s.dateOfBirth, s.imageUrl, c.name, l.mediumScore, l.hk1SubjectMediumScore, l.hk2SubjectMediumScore)" +
             " from StudentEntity s " +
             " join LearningResultEntity l on s.id = l.studentId " +
