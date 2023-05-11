@@ -15,6 +15,8 @@ public class StudentRequestDto {
 
     private String name;
 
+    private String code;
+
     private LocalDate dateOfBirth;
 
     private String imageUrl;
