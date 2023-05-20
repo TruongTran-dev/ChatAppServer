@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,4 +24,12 @@ public class NewResponseDto {
     private String mediaUrl;
 
     private Integer typeMedia; // 1: image, 2: video
+
+    private Long createdId;
+
+    private String createdName;
+
+    private String createdFile;
+
+    private LocalDateTime createdAt;
 }

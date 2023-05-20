@@ -31,7 +31,9 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public SubjectResponseDto add(SubjectRequestDto dto) {
         SubjectEntity entity = mapper.convertToEntity(dto);
-        return mapper.convertToDto(repositoy.save(entity));
+        repositoy.save(entity);
+        entity.setCode("SUBID" + "00" + entity.getId());
+        return mapper.convertToDto(entity);
     }
 
     @Transactional

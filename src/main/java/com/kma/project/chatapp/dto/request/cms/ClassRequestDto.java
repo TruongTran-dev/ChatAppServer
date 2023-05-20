@@ -13,8 +13,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ClassRequestDto {
 
-    private String code;
-
     private String name;
 
     private String year;

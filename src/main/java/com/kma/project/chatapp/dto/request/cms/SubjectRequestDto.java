@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SubjectRequestDto {
 
-    private String code;
-
     private String name;
 
 }

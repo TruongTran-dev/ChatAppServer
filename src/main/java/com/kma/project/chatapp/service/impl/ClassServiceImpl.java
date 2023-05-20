@@ -51,6 +51,7 @@ public class ClassServiceImpl implements ClassService {
     public ClassResponseDto add(ClassRequestDto dto) {
         ClassEntity entity = mapper.convertToEntity(dto);
         repositoy.save(entity);
+        entity.setCode("CLAID" + "00" + entity.getId());
 
         saveSubjectClassMap(dto, entity);
         return getDetail(entity.getId());

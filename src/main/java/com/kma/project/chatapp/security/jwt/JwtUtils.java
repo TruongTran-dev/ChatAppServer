@@ -4,6 +4,7 @@ import com.kma.project.chatapp.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class JwtUtils {
 
     @Value("${viet.app.jwtExpirationMs}")
     private int jwtExpirationMs;
+
+    @Autowired
+    BearerTokenInterceptor bearerTokenInterceptor;
 
     public String generateJwtToken(Authentication authentication) {
 
@@ -45,6 +49,10 @@ public class JwtUtils {
         return Jwts.builder().setSubject(username).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+    }
+
+    public Long getCurrentUserId() {
+        return Long.valueOf(getUserIdFromJwtToken(bearerTokenInterceptor.getBearerToken()));
     }
 
     public String getUserNameFromJwtToken(String token) {

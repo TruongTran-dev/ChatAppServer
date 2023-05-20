@@ -4,9 +4,12 @@ import com.kma.project.chatapp.dto.request.cms.NewRequestDto;
 import com.kma.project.chatapp.dto.response.auth.PageResponse;
 import com.kma.project.chatapp.dto.response.cms.NewResponseDto;
 import com.kma.project.chatapp.entity.NewEntity;
+import com.kma.project.chatapp.entity.UserEntity;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.mapper.NewMapper;
 import com.kma.project.chatapp.repository.NewRepository;
+import com.kma.project.chatapp.repository.UserRepository;
+import com.kma.project.chatapp.security.jwt.JwtUtils;
 import com.kma.project.chatapp.service.NewService;
 import com.kma.project.chatapp.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Transactional(readOnly = true)
 @Service
@@ -25,12 +29,20 @@ public class NewServiceImpl implements NewService {
     NewRepository repository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     NewMapper mapper;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
 
     @Transactional
     @Override
     public NewResponseDto add(NewRequestDto dto) {
         NewEntity entity = mapper.convertToEntity(dto);
+        entity.setCreatedBy(jwtUtils.getCurrentUserId());
         repository.save(entity);
         return mapper.convertToDto(entity);
     }
@@ -57,7 +69,16 @@ public class NewServiceImpl implements NewService {
     public NewResponseDto getDetail(Long id) {
         NewEntity newEntity = repository.findById(id)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.new-not-found")).build());
-        return mapper.convertToDto(newEntity);
+
+        NewResponseDto newResponseDto = mapper.convertToDto(newEntity);
+        Optional<UserEntity> userEntity = userRepository.findById(newEntity.getCreatedBy());
+        if (userEntity.isPresent()) {
+            newResponseDto.setCreatedAt(newEntity.getCreatedAt());
+            newResponseDto.setCreatedName(userEntity.get().getFullName());
+            newResponseDto.setCreatedId(newEntity.getCreatedBy());
+            newResponseDto.setCreatedFile(userEntity.get().getFileUrl());
+        }
+        return newResponseDto;
     }
 
     @Override
