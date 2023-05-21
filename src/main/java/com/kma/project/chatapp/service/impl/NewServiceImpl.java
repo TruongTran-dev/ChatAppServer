@@ -93,7 +93,7 @@ public class NewServiceImpl implements NewService {
                     newResponseDto.setCreatedAt(entity.getCreatedAt());
                     newResponseDto.setCreatedName(userEntity.get().getFullName());
                     newResponseDto.setCreatedId(entity.getCreatedBy());
-
+                    newResponseDto.setCreatedFile(userEntity.get().getFileUrl());
                 }
             }
             return newResponseDto;
