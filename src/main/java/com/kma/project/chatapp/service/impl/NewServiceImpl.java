@@ -85,6 +85,18 @@ public class NewServiceImpl implements NewService {
     public PageResponse<NewResponseDto> getAllNew(Integer page, Integer size, String sort, String search) {
         Pageable pageable = PageUtils.customPageable(page, size, sort);
         Page<NewEntity> pageEntity = repository.findAllByTitleLikeIgnoreCase(pageable, PageUtils.buildSearch(search));
-        return PageUtils.formatPageResponse(pageEntity.map(entity -> mapper.convertToDto(entity)));
+        return PageUtils.formatPageResponse(pageEntity.map(entity -> {
+            NewResponseDto newResponseDto = mapper.convertToDto(entity);
+            if (entity.getCreatedBy() != null) {
+                Optional<UserEntity> userEntity = userRepository.findById(entity.getCreatedBy());
+                if (userEntity.isPresent()) {
+                    newResponseDto.setCreatedAt(entity.getCreatedAt());
+                    newResponseDto.setCreatedName(userEntity.get().getFullName());
+                    newResponseDto.setCreatedId(entity.getCreatedBy());
+
+                }
+            }
+            return newResponseDto;
+        }));
     }
 }
