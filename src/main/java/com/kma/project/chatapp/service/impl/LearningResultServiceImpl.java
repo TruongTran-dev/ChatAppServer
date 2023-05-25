@@ -4,10 +4,12 @@ import com.kma.project.chatapp.dto.request.cms.LearningResultDetailRequestDto;
 import com.kma.project.chatapp.dto.response.cms.LearningResultDetailResponseDto;
 import com.kma.project.chatapp.entity.LearningResultDetailEntity;
 import com.kma.project.chatapp.entity.LearningResultEntity;
+import com.kma.project.chatapp.entity.SubjectEntity;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.mapper.LearningResultDetailMapper;
 import com.kma.project.chatapp.repository.LearningResultDetailRepository;
 import com.kma.project.chatapp.repository.LearningResultRepository;
+import com.kma.project.chatapp.repository.SubjectRepositoy;
 import com.kma.project.chatapp.service.LearningResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,6 +35,9 @@ public class LearningResultServiceImpl implements LearningResultService {
     @Autowired
     LearningResultDetailRepository learningResultDetailRepository;
 
+    @Autowired
+    SubjectRepositoy subjectRepositoy;
+
     @Override
     public LearningResultDetailResponseDto updateScore(Long id, LearningResultDetailRequestDto dto) {
         LearningResultDetailEntity resultDetail = resultDetailRepository.findById(id)
@@ -46,7 +52,10 @@ public class LearningResultServiceImpl implements LearningResultService {
             Float semesterAverageScore = (regularReviewScore + 2 * resultDetail.getM45TestScore() + 3 * resultDetail.getSemesterTestScore()) / 6;
             resultDetail.setSemesterSummaryScore(semesterAverageScore);
         }
-        return mapper.convertToDto(resultDetailRepository.save(resultDetail));
+        LearningResultDetailResponseDto responseDto = mapper.convertToDto(resultDetailRepository.save(resultDetail));
+        Optional<SubjectEntity> subjectEntity = subjectRepositoy.findById(resultDetail.getSubjectId());
+        subjectEntity.ifPresent(entity -> responseDto.setSubjectName(entity.getName()));
+        return responseDto;
     }
 
     @Override
