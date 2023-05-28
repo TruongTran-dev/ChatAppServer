@@ -2,12 +2,9 @@ server:
   port: 8080
 spring:
   datasource:
-#        password: 11111111
-    #        url: jdbc:postgresql://localhost:5432/app_chat
-    #        username: postgres
-    password: X-UcF7Hmb7VwsnOEQOfv9YNixyOZTsuj
-    url: jdbc:postgresql://tiny.db.elephantsql.com/riiywshg
-    username: riiywshg
+    password: 123456
+    url: jdbc:postgresql://localhost:5432/app_chat
+    username: postgres
   jpa:
     hibernate:
       ddl-auto: update
