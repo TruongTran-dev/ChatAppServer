@@ -91,7 +91,7 @@ public class NewServiceImpl implements NewService {
                 Optional<UserEntity> userEntity = userRepository.findById(entity.getCreatedBy());
                 if (userEntity.isPresent()) {
                     newResponseDto.setCreatedAt(entity.getCreatedAt());
-                    newResponseDto.setCreatedName(userEntity.get().getFullName());
+                    newResponseDto.setCreatedName(userEntity.get().getUsername());
                     newResponseDto.setCreatedId(entity.getCreatedBy());
                     newResponseDto.setCreatedFile(userEntity.get().getFileUrl());
                 }
