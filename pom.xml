@@ -105,6 +105,12 @@
             <artifactId>hibernate-types-52</artifactId>
             <version>2.3.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>6.9.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

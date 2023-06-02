@@ -29,4 +29,7 @@ public class StudentEntity extends BaseEntity {
     @JoinColumn(name = "class_id", nullable = false)
     private ClassEntity classEntity;
 
+    @Column(name = "parent_id")
+    private Long parentId;
+
 }

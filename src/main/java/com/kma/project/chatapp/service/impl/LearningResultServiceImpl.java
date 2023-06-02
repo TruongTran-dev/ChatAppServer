@@ -4,13 +4,13 @@ import com.kma.project.chatapp.dto.request.cms.LearningResultDetailRequestDto;
 import com.kma.project.chatapp.dto.response.cms.LearningResultDetailResponseDto;
 import com.kma.project.chatapp.entity.LearningResultDetailEntity;
 import com.kma.project.chatapp.entity.LearningResultEntity;
+import com.kma.project.chatapp.entity.StudentEntity;
 import com.kma.project.chatapp.entity.SubjectEntity;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.mapper.LearningResultDetailMapper;
-import com.kma.project.chatapp.repository.LearningResultDetailRepository;
-import com.kma.project.chatapp.repository.LearningResultRepository;
-import com.kma.project.chatapp.repository.SubjectRepositoy;
+import com.kma.project.chatapp.repository.*;
 import com.kma.project.chatapp.service.LearningResultService;
+import com.kma.project.chatapp.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +38,18 @@ public class LearningResultServiceImpl implements LearningResultService {
     @Autowired
     SubjectRepositoy subjectRepositoy;
 
+    @Autowired
+    StudentRepository studentRepository;
+
+    @Autowired
+    DeviceTokenRepository deviceTokenRepository;
+
+    @Autowired
+    LearningResultRepository learningResultRepository;
+
+    @Autowired
+    NotificationService notificationService;
+
     @Override
     public LearningResultDetailResponseDto updateScore(Long id, LearningResultDetailRequestDto dto) {
         LearningResultDetailEntity resultDetail = resultDetailRepository.findById(id)
@@ -51,6 +63,22 @@ public class LearningResultServiceImpl implements LearningResultService {
             // điểm trung bình môn học của 1 học kì
             Float semesterAverageScore = (regularReviewScore + 2 * resultDetail.getM45TestScore() + 3 * resultDetail.getSemesterTestScore()) / 6;
             resultDetail.setSemesterSummaryScore(semesterAverageScore);
+
+            LearningResultEntity learningResultEntity = learningResultRepository.getById(resultDetail.getLearningResultId());
+            StudentEntity studentEntity = studentRepository.getById(learningResultEntity.getStudentId());
+
+            if (studentEntity.getParentId() != null) {
+                // bắn noti lên app
+                String message = "Học sinh :name đã có điểm học kì :semester";
+                message = message.replace(":name", studentEntity.getName());
+                message = message.replace(":semester", resultDetail.getTerm().toString());
+
+                String finalMessage = message;
+                deviceTokenRepository.findFirstByUserId(studentEntity.getParentId()).ifPresent(deviceTokenEntity -> {
+                    String deviceToken = deviceTokenEntity.getToken();
+                    notificationService.sendNotification(deviceToken, "App Chat", finalMessage);
+                });
+            }
         }
         LearningResultDetailResponseDto responseDto = mapper.convertToDto(resultDetailRepository.save(resultDetail));
         Optional<SubjectEntity> subjectEntity = subjectRepositoy.findById(resultDetail.getSubjectId());

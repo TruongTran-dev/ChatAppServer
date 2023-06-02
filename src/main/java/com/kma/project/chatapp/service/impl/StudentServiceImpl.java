@@ -9,6 +9,7 @@ import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.mapper.ClassMapper;
 import com.kma.project.chatapp.mapper.StudentMapper;
 import com.kma.project.chatapp.repository.*;
+import com.kma.project.chatapp.security.jwt.JwtUtils;
 import com.kma.project.chatapp.service.StudentService;
 import com.kma.project.chatapp.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private ClassMapper classMapper;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Transactional
     @Override
@@ -137,6 +141,9 @@ public class StudentServiceImpl implements StudentService {
     public StudentResponseDto getDetailByCode(String code) {
         StudentEntity entity = repositoy.findByCode(code)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
+
+        entity.setParentId(jwtUtils.getCurrentUserId());
+        repositoy.save(entity);
 
         StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
         studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));

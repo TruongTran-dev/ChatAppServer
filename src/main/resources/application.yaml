@@ -37,5 +37,8 @@ email:
   fromEmail: bookingcare666@gmail.com
   password: bmoqhrufffwexozg
 
+app:
+  firebase-configuration-file: chatapp-97dbc-firebase-adminsdk-26ote-fc738ec4b9.json
+
 
 

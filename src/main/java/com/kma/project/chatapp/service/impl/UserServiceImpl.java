@@ -6,20 +6,14 @@ import com.kma.project.chatapp.dto.response.auth.PageResponse;
 import com.kma.project.chatapp.dto.response.auth.UserOutputDto;
 import com.kma.project.chatapp.dto.response.cms.ClassResponseDto;
 import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
-import com.kma.project.chatapp.entity.RefreshToken;
-import com.kma.project.chatapp.entity.RoleEntity;
-import com.kma.project.chatapp.entity.StudentEntity;
-import com.kma.project.chatapp.entity.UserEntity;
+import com.kma.project.chatapp.entity.*;
 import com.kma.project.chatapp.enums.ERole;
 import com.kma.project.chatapp.exception.AppException;
 import com.kma.project.chatapp.exception.AppResponseDto;
 import com.kma.project.chatapp.mapper.ClassMapper;
 import com.kma.project.chatapp.mapper.StudentMapper;
 import com.kma.project.chatapp.mapper.UserMapper;
-import com.kma.project.chatapp.repository.ClassRepository;
-import com.kma.project.chatapp.repository.RoleRepository;
-import com.kma.project.chatapp.repository.StudentRepository;
-import com.kma.project.chatapp.repository.UserRepository;
+import com.kma.project.chatapp.repository.*;
 import com.kma.project.chatapp.security.jwt.JwtUtils;
 import com.kma.project.chatapp.security.services.UserDetailsImpl;
 import com.kma.project.chatapp.service.RefreshTokenService;
@@ -65,6 +59,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ClassRepository classRepository;
+
+    @Autowired
+    private DeviceTokenRepository deviceTokenRepository;
 
     @Autowired
     private ClassMapper classMapper;
@@ -137,6 +134,9 @@ public class UserServiceImpl implements UserService {
         Date expiredDate = new Date((new Date()).getTime() + jwtExpirationMs);
         LocalDateTime localDate = expiredDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
+        // register device token
+        registerDeviceToken(userDetails.getUserId(), loginRequest.getDeviceToken());
+
         JwtResponse jwtResponse = JwtResponse.builder()
                 .refreshToken(refreshToken.getToken())
                 .id(userDetails.getUserId())
@@ -150,6 +150,16 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         return AppResponseDto.builder().data(jwtResponse).httpStatus(200).message("Đăng nhập thành công").build();
+    }
+
+    private void registerDeviceToken(Long userId, String deviceToken) {
+        DeviceTokenEntity deviceTokenEntity = deviceTokenRepository.findFirstByUserId(userId)
+                .orElse(new DeviceTokenEntity());
+        deviceTokenEntity.setUserId(userId);
+        deviceTokenEntity.setToken(deviceToken);
+
+        deviceTokenRepository.save(deviceTokenEntity);
+
     }
 
     @Override
