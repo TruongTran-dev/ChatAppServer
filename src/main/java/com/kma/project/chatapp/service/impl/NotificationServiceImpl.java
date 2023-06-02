@@ -40,6 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
                         .setToken(deviceTokenEntity.getToken())
                         .setNotification(new Notification(title, message))
                         .build());
+        log.info("Push noti sucess");
     }
 
 
