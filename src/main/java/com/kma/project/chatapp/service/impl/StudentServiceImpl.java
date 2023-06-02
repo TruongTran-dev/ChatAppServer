@@ -137,6 +137,7 @@ public class StudentServiceImpl implements StudentService {
         return studentResponseDto;
     }
 
+    @Transactional
     @Override
     public StudentResponseDto getDetailByCode(String code) {
         StudentEntity entity = repositoy.findByCode(code)
