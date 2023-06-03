@@ -64,6 +64,9 @@ public class UserServiceImpl implements UserService {
     private DeviceTokenRepository deviceTokenRepository;
 
     @Autowired
+    private LearningResultRepository learningResultRepository;
+
+    @Autowired
     private ClassMapper classMapper;
 
     @Autowired
@@ -283,6 +286,14 @@ public class UserServiceImpl implements UserService {
                     ClassResponseDto classResponseDto = classMapper.convertToDto(studentEntity.getClassEntity());
                     studentResponseDto.setClassResponse(classResponseDto);
                     studentResponseDto.setClassName(classResponseDto.getName());
+
+                    LearningResultEntity learningResultEntity = learningResultRepository
+                            .findByStudentIdAndYear(studentEntity.getId(), classResponseDto.getYear());
+                    if (learningResultEntity != null) {
+                        studentResponseDto.setMediumScore(learningResultEntity.getMediumScore());
+                        studentResponseDto.setHk1SubjectMediumScore(learningResultEntity.getHk1SubjectMediumScore());
+                        studentResponseDto.setHk2SubjectMediumScore(learningResultEntity.getHk2SubjectMediumScore());
+                    }
                 }
                 studentOutputs.add(studentResponseDto);
             }
