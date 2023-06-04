@@ -4,6 +4,7 @@ import com.kma.project.chatapp.dto.request.cms.StudentRequestDto;
 import com.kma.project.chatapp.dto.response.auth.PageResponse;
 import com.kma.project.chatapp.dto.response.cms.StudentLearningResultResponseDto;
 import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
+import com.kma.project.chatapp.exception.AppResponseDto;
 
 public interface StudentService {
 
@@ -13,7 +14,7 @@ public interface StudentService {
 
     StudentResponseDto getDetail(Long id, String semesterYear);
 
-    StudentResponseDto getDetailByCode(String code);
+    AppResponseDto<Object> getDetailByCode(String code);
 
 
     void delete(Long id);

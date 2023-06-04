@@ -6,6 +6,7 @@ import com.kma.project.chatapp.dto.response.cms.StudentLearningResultResponseDto
 import com.kma.project.chatapp.dto.response.cms.StudentResponseDto;
 import com.kma.project.chatapp.entity.*;
 import com.kma.project.chatapp.exception.AppException;
+import com.kma.project.chatapp.exception.AppResponseDto;
 import com.kma.project.chatapp.mapper.ClassMapper;
 import com.kma.project.chatapp.mapper.StudentMapper;
 import com.kma.project.chatapp.repository.*;
@@ -17,10 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Transactional(readOnly = true)
 @Service
@@ -139,9 +137,15 @@ public class StudentServiceImpl implements StudentService {
 
     @Transactional
     @Override
-    public StudentResponseDto getDetailByCode(String code) {
-        StudentEntity entity = repositoy.findByCode(code)
-                .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.student-not-found")).build());
+    public AppResponseDto<Object> getDetailByCode(String code) {
+        Optional<StudentEntity> studentOptional = repositoy.findByCode(code);
+        StudentEntity entity;
+        if (studentOptional.isPresent()) {
+            entity = studentOptional.get();
+        } else {
+            return AppResponseDto.builder().httpStatus(500).message("Không tìm thấy học sinh này").build();
+        }
+//        return AppResponseDto.builder().httpStatus(200).message("Đăng kí thành công").build();
 
         entity.setParentId(jwtUtils.getCurrentUserId());
         repositoy.save(entity);
@@ -149,7 +153,7 @@ public class StudentServiceImpl implements StudentService {
         StudentResponseDto studentResponseDto = mapper.convertToDto(entity);
         studentResponseDto.setClassResponse(classMapper.convertToDto(entity.getClassEntity()));
         studentResponseDto.setClassName(entity.getClassEntity().getName());
-        return studentResponseDto;
+        return AppResponseDto.builder().data(studentResponseDto).httpStatus(200).message("Tìm học sinh thành công").build();
     }
 
     @Transactional
