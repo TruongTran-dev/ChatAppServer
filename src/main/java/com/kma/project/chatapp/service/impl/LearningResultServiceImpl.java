@@ -56,6 +56,9 @@ public class LearningResultServiceImpl implements LearningResultService {
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.result-detail-not-found")).build());
         mapper.update(dto, resultDetail);
 
+        LearningResultEntity learningResultEntity = learningResultRepository.getById(resultDetail.getLearningResultId());
+        StudentEntity studentEntity = studentRepository.getById(learningResultEntity.getStudentId());
+
         if (resultDetail.getM15TestScore() != null && resultDetail.getM45TestScore() != null
                 && resultDetail.getOralTestScore() != null && resultDetail.getSemesterTestScore() != null) {
             // điểm đánh giá thường xuyên
@@ -64,8 +67,6 @@ public class LearningResultServiceImpl implements LearningResultService {
             Float semesterAverageScore = (regularReviewScore + 2 * resultDetail.getM45TestScore() + 3 * resultDetail.getSemesterTestScore()) / 6;
             resultDetail.setSemesterSummaryScore(semesterAverageScore);
 
-            LearningResultEntity learningResultEntity = learningResultRepository.getById(resultDetail.getLearningResultId());
-            StudentEntity studentEntity = studentRepository.getById(learningResultEntity.getStudentId());
             SubjectEntity subjectEntity = subjectRepositoy.getById(resultDetail.getSubjectId());
 
             if (studentEntity.getParentId() != null) {
