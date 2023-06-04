@@ -79,7 +79,7 @@ public class LearningResultServiceImpl implements LearningResultService {
                 String finalMessage = message;
                 deviceTokenRepository.findFirstByUserId(studentEntity.getParentId()).ifPresent(deviceTokenEntity -> {
                     String deviceToken = deviceTokenEntity.getToken();
-                    notificationService.sendNotification(deviceToken, "App Chat", finalMessage);
+                    notificationService.sendNotification(deviceToken, "chat_app", finalMessage);
                 });
             }
         }
