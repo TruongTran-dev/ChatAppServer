@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -51,42 +50,51 @@ public class LearningResultServiceImpl implements LearningResultService {
     NotificationService notificationService;
 
     @Override
-    public LearningResultDetailResponseDto updateScore(Long id, LearningResultDetailRequestDto dto) {
+    public LearningResultDetailResponseDto updateScore(Long id, LearningResultDetailRequestDto resultDto) {
         LearningResultDetailEntity resultDetail = resultDetailRepository.findById(id)
                 .orElseThrow(() -> AppException.builder().errorCodes(Collections.singletonList("error.result-detail-not-found")).build());
-        mapper.update(dto, resultDetail);
 
         LearningResultEntity learningResultEntity = learningResultRepository.getById(resultDetail.getLearningResultId());
         StudentEntity studentEntity = studentRepository.getById(learningResultEntity.getStudentId());
 
-        if (resultDetail.getM15TestScore() != null && resultDetail.getM45TestScore() != null
-                && resultDetail.getOralTestScore() != null && resultDetail.getSemesterTestScore() != null) {
+        SubjectEntity subjectEntity = subjectRepositoy.getById(resultDetail.getSubjectId());
+        if (resultDto.getM15TestScore() != null && resultDto.getM45TestScore() != null
+                && resultDto.getOralTestScore() != null && resultDto.getSemesterTestScore() != null) {
             // điểm đánh giá thường xuyên
-            Float regularReviewScore = (resultDetail.getM15TestScore() + resultDetail.getOralTestScore()) / 2;
+            Float regularReviewScore = (resultDto.getM15TestScore() + resultDto.getOralTestScore()) / 2;
             // điểm trung bình môn học của 1 học kì
-            Float semesterAverageScore = (regularReviewScore + 2 * resultDetail.getM45TestScore() + 3 * resultDetail.getSemesterTestScore()) / 6;
+            Float semesterAverageScore = (regularReviewScore + 2 * resultDto.getM45TestScore() + 3 * resultDto.getSemesterTestScore()) / 6;
             resultDetail.setSemesterSummaryScore(semesterAverageScore);
-
-            SubjectEntity subjectEntity = subjectRepositoy.getById(resultDetail.getSubjectId());
-
-            if (studentEntity.getParentId() != null) {
-                // bắn noti lên app
-                String message = "Học sinh :name đã có điểm môn :subject học kì :semester";
-                message = message.replace(":name", studentEntity.getName());
-                message = message.replace(":subject", subjectEntity.getName());
-                message = message.replace(":semester", resultDetail.getTerm().toString());
-
-                String finalMessage = message;
-                deviceTokenRepository.findFirstByUserId(studentEntity.getParentId()).ifPresent(deviceTokenEntity -> {
-                    String deviceToken = deviceTokenEntity.getToken();
-                    notificationService.sendNotification(deviceToken, "chat_app", finalMessage);
-                });
-            }
         }
+        // put noti
+        if (resultDto.getM15TestScore() != null || resultDto.getM45TestScore() != null
+                || resultDto.getOralTestScore() != null || resultDto.getSemesterTestScore() != null) {
+            putNotiWhenUpdateScore(studentEntity, subjectEntity, resultDetail, resultDto);
+        }
+
+        mapper.update(resultDto, resultDetail);
         LearningResultDetailResponseDto responseDto = mapper.convertToDto(resultDetailRepository.save(resultDetail));
-        Optional<SubjectEntity> subjectEntity = subjectRepositoy.findById(resultDetail.getSubjectId());
-        subjectEntity.ifPresent(entity -> responseDto.setSubjectName(entity.getName()));
+        responseDto.setSubjectName(subjectEntity.getName());
         return responseDto;
+
+    }
+
+    private void putNotiWhenUpdateScore(StudentEntity studentEntity, SubjectEntity subjectEntity,
+                                        LearningResultDetailEntity resultDetail, LearningResultDetailRequestDto resultDto) {
+
+        if (studentEntity.getParentId() != null) {
+            // bắn noti lên app
+            String message = "Học sinh :name đã có điểm môn :subject học kì :semester";
+            message = message.replace(":name", studentEntity.getName());
+            message = message.replace(":subject", subjectEntity.getName());
+            message = message.replace(":semester", resultDetail.getTerm().toString());
+
+            String finalMessage = message;
+            deviceTokenRepository.findFirstByUserId(studentEntity.getParentId()).ifPresent(deviceTokenEntity -> {
+                String deviceToken = deviceTokenEntity.getToken();
+                notificationService.sendNotification(deviceToken, "chat_app", finalMessage);
+            });
+        }
     }
 
     @Override
