@@ -66,11 +66,13 @@ public class LearningResultServiceImpl implements LearningResultService {
 
             LearningResultEntity learningResultEntity = learningResultRepository.getById(resultDetail.getLearningResultId());
             StudentEntity studentEntity = studentRepository.getById(learningResultEntity.getStudentId());
+            SubjectEntity subjectEntity = subjectRepositoy.getById(resultDetail.getSubjectId());
 
             if (studentEntity.getParentId() != null) {
                 // bắn noti lên app
-                String message = "Học sinh :name đã có điểm học kì :semester";
+                String message = "Học sinh :name đã có điểm môn :subject học kì :semester";
                 message = message.replace(":name", studentEntity.getName());
+                message = message.replace(":subject", subjectEntity.getName());
                 message = message.replace(":semester", resultDetail.getTerm().toString());
 
                 String finalMessage = message;
