@@ -1,5 +1,7 @@
 package com.kma.project.chatapp.security.jwt;
 
+import com.kma.project.chatapp.entity.UserEntity;
+import com.kma.project.chatapp.repository.UserRepository;
 import com.kma.project.chatapp.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -12,12 +14,15 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    @Autowired
+    UserRepository userRepository;
     @Value("${viet.app.jwtSecret}")
     private String jwtSecret;
 
@@ -46,7 +51,15 @@ public class JwtUtils {
     }
 
     public String generateTokenFromUsername(String username) {
-        return Jwts.builder().setSubject(username).setIssuedAt(new Date())
+        Map<String, Object> claims = new HashMap<>();
+        Optional<UserEntity> userEntityOptional = userRepository.findByUsername(username);
+        if (userEntityOptional.isPresent()) {
+            claims.put("username", userEntityOptional.get().getUsername());
+            claims.put("userId", userEntityOptional.get().getId());
+            claims.put("email", userEntityOptional.get().getEmail());
+            claims.put("role", userEntityOptional.get().getRoles());
+        }
+        return Jwts.builder().setClaims(claims).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs)).signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
